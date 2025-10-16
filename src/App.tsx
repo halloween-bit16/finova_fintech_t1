@@ -89,7 +89,7 @@ function App() {
 
             <div className="mt-6 p-3">
               <p>Input</p>
-              <div className="flex justify-between">
+              <div className="flex gap-3">
                 <input
                   type="number"
                   value={amount}
@@ -120,9 +120,9 @@ function App() {
               </div>
             </div>
 
-            <div className="p-2">
+            <div className="p-3">
               <p>Output</p>
-              <div className="flex justify-between">
+              <div className="flex gap-3">
                 <input
                   type="text"
                   value={convertedAmount}
@@ -146,7 +146,7 @@ function App() {
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleConvert}
-                className="w-97 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold text-lg shadow-md hover:shadow-xl hover:scale-103 transition-transform duration-200 focus:outline-none"
+                className="w-[200px] py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold text-lg shadow-md hover:shadow-xl hover:scale-103 transition-transform duration-200 focus:outline-none"
               >
                 Convert Currency
               </button>
