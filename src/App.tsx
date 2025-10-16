@@ -9,53 +9,42 @@ function App() {
   const [rate, setRate] = useState(null);
   const [currencies, setCurrencies] = useState([]);
 
-  // Fetch list of available currencies
   useEffect(() => {
     const fetchCurrencies = async () => {
       try {
         const res = await fetch("https://api.exchangerate-api.com/v4/latest/USD");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-
-        // protect against missing data.rates
         const codes = Object.keys(data?.rates || {});
         if (codes.length === 0) {
           console.warn("No currency codes found in API response. Falling back to common list.");
           setCurrencies(["USD", "INR", "EUR", "GBP", "JPY"]);
         } else {
           setCurrencies(codes);
-          // Make sure defaults exist in list
           if (!codes.includes(fromCurrency)) setFromCurrency(codes[0]);
           if (!codes.includes(toCurrency)) setToCurrency(codes[0]);
         }
       } catch (error) {
         console.error("Error fetching currency list:", error);
-        // fallback list so UI still works
         setCurrencies(["USD", "INR", "EUR", "GBP", "JPY"]);
       }
     };
-
     fetchCurrencies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Fetch rate and convert
   const fetchRate = async () => {
     try {
       const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const newRate = data?.rates?.[toCurrency];
-
       if (typeof newRate !== "number") {
         console.error("Rate not found for", toCurrency, "in response:", data);
         setRate(null);
         setConvertedAmount("");
         return;
       }
-
       setRate(newRate);
-      // ensure `amount` is a number
       const numericAmount = Number(amount) || 0;
       setConvertedAmount((numericAmount * newRate).toFixed(2));
     } catch (error) {
@@ -72,7 +61,6 @@ function App() {
   return (
     <>
       <div className="min-h-screen flex flex-col">
-        {/* center background area */}
         <div className="bg-gradient-to-l from-indigo-400 to-violet-400 flex-grow flex flex-col items-center justify-center">
           <div className="p-10 bg-stone-50 min-h-135 min-w-120 rounded-3xl shadow-lg/20 shadow-black border border-sky-50">
             <div className="flex justify-center">
@@ -94,7 +82,6 @@ function App() {
                   type="number"
                   value={amount}
                   onChange={(e) => {
-                    // use currentTarget to avoid any synthetic event pooling issues
                     const v = e.currentTarget.value;
                     setAmount(v === "" ? "" : Number(v));
                   }}
@@ -160,9 +147,8 @@ function App() {
           </div>
         </div>
 
-        {/* Footer stays at bottom because parent is flex-col with min height */}
         <div className="bg-stone-800 text-white text-center py-4 mt-auto">
-          © 2025 Currency Converter | Ruchi Pawar
+          © 2025 Currency Converter | Ruchi Pawar | <a href="https://github.com/halloween-bit16/finova_fintech_t1"> Github Repository Link </a>
         </div>
       </div>
     </>
